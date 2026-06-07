@@ -1,0 +1,217 @@
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass, field
+from pathlib import Path
+
+
+PROJECT_DIR = Path(__file__).resolve().parent
+
+
+@dataclass(slots=True)
+class Config:
+    CAMERA_INDEX: int = 0
+    FRAME_WIDTH: int = 960
+    FRAME_HEIGHT: int = 540
+    CAMERA_FPS: int = 60
+    CAMERA_BUFFER_SIZE: int = 1
+    FLIP_HORIZONTAL: bool = True
+    WINDOW_NAME: str = "Gesture Theremin"
+
+    SAMPLE_RATE: int = 44100
+    BLOCK_SIZE: int = 256
+
+    TRACKER_DETECTION_CONFIDENCE: float = 0.55
+    TRACKER_PRESENCE_CONFIDENCE: float = 0.65
+    SWAP_HANDEDNESS: bool = True
+    SHOW_HANDEDNESS_DEBUG: bool = True
+    HAND_ALIGNMENT_ENABLED: bool = True
+    HAND_ALIGNMENT_TARGET_RATIO: float = 0.42
+    HAND_ALIGNMENT_TOLERANCE: float = 0.08
+    HAND_ALIGNMENT_STABLE_SECONDS: float = 0.55
+    HAND_ALIGNMENT_GUIDE_HEIGHT_RATIO: float = 0.50
+    LANDMARK_SMOOTH_ALPHA: float = 0.96
+    LANDMARK_FAST_ALPHA: float = 0.995
+    LANDMARK_MOTION_REF_PALM_RATIO: float = 0.85
+    HAND_HOLD_SECONDS: float = 0.18
+    HAND_IDENTITY_MISMATCH_COST: float = 75.0
+    HAND_IDENTITY_POSITION_COST: float = 80.0
+    CONTROL_POINT_MEDIAN_WINDOW: int = 1
+    CONTROL_ONE_EURO_MIN_CUTOFF: float = 1.7
+    CONTROL_ONE_EURO_BETA: float = 0.055
+    CONTROL_ONE_EURO_D_CUTOFF: float = 1.0
+    CONTROL_PREDICTION_SECONDS: float = 0.018
+
+    MIDI_MIN: int = 48
+    MIDI_MAX: int = 84
+    ROOT_NOTE: str = "C"
+    SCALE_TYPE: str = "pentatonic_major"
+    EXTRA_PITCH_CLASSES: tuple[int, ...] = field(default_factory=tuple)
+
+    INPUT_SMOOTH_ALPHA: float = 1.0
+    PITCH_SMOOTH_ALPHA: float = 1.0
+    VOLUME_SMOOTH_ALPHA: float = 0.55
+    VELOCITY_PITCH_ALPHA_BOOST: float = 0.18
+    PITCH_NOTE_STICKINESS: float = 0.0
+
+    MAX_SCALE_STEP_PER_UPDATE: int = 99
+    MAX_MIDI_CHANGE_PER_SEC: float = 9999.0
+
+    PLAY_ON_OPEN_THRESHOLD: float = 0.55
+    PLAY_OFF_OPEN_THRESHOLD: float = 0.40
+    RIGHT_PINCH_OPEN_ON_THRESHOLD: float = 0.34
+    RIGHT_PINCH_OPEN_OFF_THRESHOLD: float = 0.22
+
+    MIN_VOLUME: float = 0.0
+    MAX_VOLUME: float = 0.8
+    PINCH_KEY_VOLUME: float = 0.52
+    MELODY_VOLUME: float = 0.56
+    LEFT_VOLUME_TOP_ZONE_RATIO: float = 0.33
+    LEFT_VOLUME_MID_ZONE_RATIO: float = 0.66
+    LEFT_VOLUME_TOP: float = 0.80
+    LEFT_VOLUME_MID: float = 0.56
+    LEFT_VOLUME_BOTTOM: float = 0.32
+    ACCOMPANIMENT_VOLUME: float = 0.055
+    HYBRID_CONTINUOUS_MELODY: bool = True
+    HYBRID_MELODY_MIDI_MIN: int = 60
+    HYBRID_MELODY_MIDI_MAX: int = 67
+    HYBRID_MELODY_DISTANCE_MAX: float = 450.0
+    HYBRID_MELODY_VOICE_MIDI: int = 69
+    PRO_PITCH_LOW_NOTE: str = "C4"
+    PRO_PITCH_HIGH_NOTE: str = "G4"
+    PRO_PITCH_STEP_SEMITONES: int = 2
+    PRO_PITCH_RING_ENABLED: bool = False
+    PRO_TIMBRE_PRESET: str = "mixure_piano"
+    PRO_MIXURE_PIANO_TRIGGER_SECONDS: float = 1.85
+    PIANO_CHORD_HOLD_SECONDS: float = 0.10
+    PIANO_CHORD_RELEASE_SECONDS: float = 1.85
+    PIANO_CHORD_RETRIGGER_COOLDOWN_SECONDS: float = 2.0
+    CUSTOM_SCALE_NOTES: tuple[int, ...] = field(default_factory=tuple)
+    APP_EDITION: str = "professional"  # "basic" or "professional"
+    PERFORMANCE_RECORD_DIR: str = "recordings"
+    PERFORMANCE_RECORD_FPS: int = 30
+    BASIC_HYBRID1_SCORE_GUIDE: bool = True
+    BASIC_HYBRID1_DEFAULT_SONG: str = "traumerei"
+    BASIC_HYBRID1_SONG_SPEED_MIN: float = 0.5
+    BASIC_HYBRID1_SONG_SPEED_MAX: float = 1.5
+    BASIC_HYBRID1_SONG_SPEED_STEP: float = 0.1
+    BASIC_HYBRID1_GUIDE_ASSIST_STRENGTH: float = 0.34
+    BASIC_HYBRID1_ENABLE_SCORING: bool = True
+    BASIC_HYBRID1_SYNTH_MODE: str = "clarinet"
+    BASIC_PITCH_CALIBRATION_ENABLED: bool = True
+    BASIC_PITCH_CALIBRATION_HOLD_SECONDS: float = 2.0
+    BASIC_PITCH_CALIBRATION_STABLE_DELTA: float = 14.0
+    BASIC_PITCH_CALIBRATION_MIN_SPAN: float = 220.0
+    BASIC_PITCH_CALIBRATION_MARGIN_MIN: float = 24.0
+    BASIC_PITCH_CALIBRATION_MARGIN_RATIO: float = 0.08
+    HYBRID2_RIGHT_TOP_ZONE_RATIO: float = 0.33
+    HYBRID2_RIGHT_MID_ZONE_RATIO: float = 0.66
+    HYBRID2_RIGHT_TOP_VOLUME: float = 0.80
+    HYBRID2_RIGHT_MID_VOLUME: float = 0.70
+    HYBRID2_RIGHT_BOTTOM_VOLUME: float = 0.60
+    HYBRID2_ENABLE_FALLBACK_NOTE: bool = True
+    HYBRID2_FALLBACK_MIDI: int = 60
+    HYBRID2_RIGHT_GESTURE_HOLD_SECONDS: float = 0.35
+    GESTURE_STABLE_FRAMES: int = 2
+    CHORD_TRIGGER_STABLE_FRAMES: int = 1
+    STATIC_GESTURE_MODEL_TYPE: str = "svm"
+    STATIC_GESTURE_MODEL_PATH: str = str(PROJECT_DIR / "models" / "static_gesture_svm.joblib")
+    STATIC_GESTURE_SVM_C: float = 10.0
+    STATIC_GESTURE_SVM_GAMMA: str = "scale"
+    STATIC_GESTURE_SAMPLES_PER_CLASS_MIN: int = 30
+    STATIC_GESTURE_RECORD_SECONDS: float = 7.0
+    STATIC_GESTURE_MIN_CONFIDENCE: float = 0.70
+    STATIC_GESTURE_MARGIN: float = 0.12
+    STATIC_GESTURE_K: int = 5  # legacy KNN parameter, kept for old callers
+    TRIGGER_NOTE_VOLUME: float = 0.30
+    TRIGGER_NOTE_SECONDS: float = 0.55
+    GESTURE_TRIGGER_COOLDOWN_SECONDS: float = 0.55
+    DYNAMIC_GESTURE_WINDOW_FRAMES: int = 60
+    DYNAMIC_GESTURE_MAX_RECORD_FRAMES: int = 60
+    DYNAMIC_GESTURE_MIN_RECORD_FRAMES: int = 8
+    DYNAMIC_GESTURE_RECORD_SECONDS: float = 3.0
+    DYNAMIC_GESTURE_DEFAULT_RECORD_ROUNDS: int = 1
+    DYNAMIC_GESTURE_MAX_RECORD_ROUNDS: int = 4
+    DYNAMIC_GESTURE_THRESHOLD: float = 1.25
+    DYNAMIC_GESTURE_THRESHOLD_MIN: float = 0.75
+    DYNAMIC_GESTURE_THRESHOLD_MAX: float = 1.75
+    DYNAMIC_GESTURE_MIN_CONFIDENCE: float = 0.55
+    DYNAMIC_GESTURE_EVAL_INTERVAL_FRAMES: int = 2
+    DYNAMIC_GESTURE_USE_GRU: bool = True
+    RECORDING_MONITOR_ENABLED: bool = True
+    RECORDING_MONITOR_LOG_PATH: str = "logs/dynamic_recording_debug.log"
+    VOLUME_PINCH_DEADZONE: float = 0.08
+    VOLUME_PINCH_CURVE: float = 1.35
+    MIN_ACTIVE_VOLUME: float = 0.01
+
+    RIGHT_DISTANCE_MIN: float = 55.0
+    RIGHT_DISTANCE_MAX: float = 760.0
+    CALIBRATED_DISTANCE_MIN: float = 55.0
+    CALIBRATED_DISTANCE_MAX: float = 450.0
+    CALIBRATED_DISTANCE_MIDDLE: float = 250.0
+    PITCH_DISTANCE_CURVE: float = 1.1
+    RIGHT_VELOCITY_REF: float = 620.0
+    LEFT_VELOCITY_REF: float = 480.0
+
+    FREQ_GLIDE_TIME: float = 0.025
+    ATTACK_TIME: float = 0.01
+    RELEASE_TIME: float = 0.09
+    NOTE_OVERLAP_RELEASE_TIME: float = 0.16
+    VOLUME_RESPONSE_TIME: float = 0.05
+
+    GUIDE_BPM: float = 34.0
+    GUIDE_TRAIL_SECONDS: float = 0.6
+    GUIDE_LOOP: bool = True
+    GUIDE_MIDI_PADDING_LOW: int = 1
+    GUIDE_MIDI_PADDING_HIGH: int = 0
+    GUIDE_DISTANCE_MAX: float = 620.0
+    GUIDE_SCREEN_MARGIN: float = 56.0
+    GUIDE_CURVE_ANGLE_START_DEG: float = -12.0
+    GUIDE_CURVE_ANGLE_END_DEG: float = 18.0
+    GUIDE_CURVE_SWAY_PIXELS: float = 132.0
+    GUIDE_SIDE_BIAS_PIXELS: float = -105.0
+    GUIDE_PATH_BEND_PIXELS: float = 226.0
+    GUIDE_HORIZONTAL_RATIO_NEAR: float = 0.91
+    GUIDE_HORIZONTAL_RATIO_FAR: float = 0.97
+    GUIDE_VERTICAL_COMPRESSION: float = 0.70
+    GUIDE_REGION_CENTER_X_RATIO: float = 0.50
+    GUIDE_REGION_CENTER_Y_RATIO: float = 0.36
+    GUIDE_REGION_WIDTH_RATIO: float = 0.56
+    GUIDE_REGION_HEIGHT_RATIO: float = 0.34
+    GUIDE_REGION_TOP_RATIO: float = 0.20
+    GUIDE_REGION_BOTTOM_RATIO: float = 0.70
+    GUIDE_MIN_THREE_POINT_BEND_PIXELS: float = 14.0
+    GUIDE_THREE_POINT_BEND_PIXELS: float = 30.0
+    GUIDE_PREVIEW_SECONDS: float = 3.0
+    GUIDE_FUTURE_SAMPLE_COUNT: int = 22
+    GUIDE_DISPLAY_SMOOTH_ALPHA: float = 0.22
+    GUIDE_CURVE_RENDER_STEPS: int = 7
+    GUIDE_NOTE_HOLD_RATIO: float = 0.82
+    GUIDE_ASSIST_STRENGTH: float = 0.58
+    SHOW_PITCH_SCALE: bool = True
+    PITCH_SCALE_RULER_ANGLE_DEG: float = -35.0
+    UI_BUTTON_HOLD_SECONDS: float = 5.0
+    UI_BUTTON_MOUSE_SELECT: bool = True
+    SYNTH_PRESET: str = "clarinet"
+    ENABLE_PERFORMANCE_SCORE: bool = True
+    ENABLE_ENHANCED_ARTICULATION: bool = True
+    ENABLE_GUIDE_PITCH_LOCK: bool = True
+
+    HARMONICS: tuple[tuple[int, float], ...] = field(
+        default_factory=lambda: ((1, 1.0), (2, 0.25), (3, 0.1))
+    )
+
+    DEBUG: bool = True
+
+    RIGHT_ANCHOR: tuple[int, int] = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.RIGHT_ANCHOR = (
+            int(self.FRAME_WIDTH * 0.5),
+            int(self.FRAME_HEIGHT * 0.62),
+        )
+        diagonal = math.hypot(self.FRAME_WIDTH, self.FRAME_HEIGHT)
+        self.RIGHT_DISTANCE_MAX = min(
+            max(self.RIGHT_DISTANCE_MAX, self.RIGHT_DISTANCE_MIN + 120.0),
+            diagonal,
+        )

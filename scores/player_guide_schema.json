@@ -1,0 +1,21 @@
+{
+  "format": "mixure_guide_song_v1",
+  "schema": true,
+  "key": "song_key_lowercase_ascii",
+  "title": "Human readable title",
+  "label": "Short UI label",
+  "root_note": "C",
+  "scale_type": "major",
+  "root_midi": 60,
+  "base_beats": 1.0,
+  "guide_bpm": 70.0,
+  "melody": "5 3:0.5 5:0.5 1':1.5 7:0.5 | 6 1' 5:2 | 0:1",
+  "source": {
+    "type": "player_guide_json_or_deepseek_image_conversion",
+    "path": "",
+    "notes": ""
+  },
+  "metadata": {},
+  "written_measures": [],
+  "playback_events": []
+}

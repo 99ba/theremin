@@ -1,0 +1,8 @@
+opencv-python
+mediapipe
+numpy
+sounddevice
+scikit-learn
+joblib
+imageio-ffmpeg
+torch
