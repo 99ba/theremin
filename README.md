@@ -7,7 +7,6 @@
 - `Basic`：面向基础演示和曲谱跟奏，包含自由演奏、手势学习和带曲谱引导的 `Hybrid 1`。
 - `Professional`：面向完整演奏展示，包含手势学习、专业音域设置、`Hybrid 1` 和 `Hybrid 2`。
 
-独立的 `Gesture Play` 和独立的 `Trajectory Guide` 当前没有出现在模式菜单中。曲谱引导功能集成在 Basic `Hybrid 1` 中，手势识别演奏功能集成在 `Hybrid 1` / `Hybrid 2` 中。
 
 ## 快速运行
 
@@ -29,14 +28,6 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-如果使用本机已有的 Conda 环境，可以直接运行：
-
-```powershell
-& "F:\Anaconda\envs\p1\python.exe" main.py
-```
-
-当前代码已用该环境做过语法编译和依赖导入检查。
-
 ## 依赖
 
 `requirements.txt` 当前包含：
@@ -52,7 +43,6 @@ python main.py
 | `imageio-ffmpeg` | 找不到系统 FFmpeg 时用于音视频合并 |
 | `torch` | 动态手势 GRU 模型训练和推理 |
 
-注意：当前仓库内的 `models/static_gesture_svm.joblib` 是随项目保存的模型文件。若本机 `scikit-learn` 版本和训练时版本不同，加载时可能出现版本警告。遇到识别不稳定时，建议在当前环境中重新训练静态手势模型。
 
 ## 启动流程
 
@@ -482,8 +472,6 @@ PERFORMANCE_RECORD_FPS
 - `.env`
 - 视频和 WAV 导出文件
 
-建议提交运行必需的代码和资产，谨慎提交本地采集图片数据。`datasets/` 中可能包含个人手部和环境画面，公开上传前需要确认隐私风险。
-
 ## 常见问题
 
 ### 没有声音
@@ -497,7 +485,6 @@ PERFORMANCE_RECORD_FPS
 ```python
 CAMERA_INDEX
 ```
-
 常见摄像头编号为 `0` 或 `1`。
 
 ### 左右手反了
