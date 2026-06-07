@@ -308,7 +308,7 @@ tools_mixure/
 | `convert_jianpu_images_deepseek.py` | 兼容命名的图片转换脚本 |
 | `import_player_guide_json.py` | 将中间 JSON 导入为项目曲谱 |
 
-这些脚本通过命令行参数或环境变量读取 API Key，仓库中不应提交真实密钥。
+这些脚本通过命令行参数或环境变量读取 API Key。
 
 ## 演奏录制
 
