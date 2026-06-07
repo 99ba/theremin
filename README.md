@@ -460,17 +460,6 @@ PERFORMANCE_RECORD_DIR
 PERFORMANCE_RECORD_FPS
 ```
 
-## 上传 GitHub 前建议
-
-仓库已包含 `.gitignore`，默认排除：
-
-- `__pycache__/`
-- `.DS_Store`
-- `logs/`
-- `recordings/`
-- `datasets/`
-- `.env`
-- 视频和 WAV 导出文件
 
 ## 常见问题
 
