@@ -86,13 +86,22 @@ def train_dynamic_gru_from_templates(
     sequence_length: int = 60,
     epochs: int = 120,
 ) -> bool:
+    model_path = Path(model_path)
     torch, nn, functional = _try_import_torch()
     if torch is None or nn is None or functional is None:
+        try:
+            model_path.unlink()
+        except FileNotFoundError:
+            pass
         print("  PyTorch is not installed; dynamic GRU training skipped, using sequence template matching.")
         return False
 
     x_np, y_np, labels = _load_sequences(Path(templates_path), sequence_length)
     if len(labels) < 2 or len(x_np) < 2:
+        try:
+            model_path.unlink()
+        except FileNotFoundError:
+            pass
         print("  Dynamic GRU needs at least two gesture classes / sequences; using sequence template matching.")
         return False
 

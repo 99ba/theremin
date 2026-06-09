@@ -142,6 +142,10 @@ def train_static_gesture_svm(*, templates_path: Path, model_path: Path, config) 
         trained_sides.append(side)
 
     if not models:
+        try:
+            model_path.unlink()
+        except FileNotFoundError:
+            pass
         return StaticSVMTrainResult(
             False,
             model_path,

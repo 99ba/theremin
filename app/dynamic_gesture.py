@@ -324,6 +324,12 @@ class DynamicGestureClassifier:
                 self._gru_predictor = DynamicGRUPredictor()
                 self._use_gru = self._gru_predictor.load()
                 if self._use_gru:
+                    template_names = {str(item["name"]) for item in self._templates}
+                    model_names = {str(item.get("name")) for item in self._gru_predictor.labels}
+                    if model_names != template_names:
+                        self._gru_predictor = None
+                        self._use_gru = False
+                if self._use_gru:
                     self.sequence_length = int(self._gru_predictor.sequence_length)
                     self._history = deque(self._history, maxlen=self.sequence_length)
             except Exception:

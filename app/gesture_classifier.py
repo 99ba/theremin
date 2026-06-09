@@ -144,6 +144,11 @@ class GestureClassifier:
                     "midi": int(binding.midi_notes[0]) if binding.midi_notes else None,
                 }
             )
+        if not self._templates:
+            self._model = None
+            self._bindings = {}
+            self.status_message = "No static gesture templates for this hand."
+            return 0
         self._load_or_train_model(path)
         return len(self._templates)
 
@@ -167,7 +172,18 @@ class GestureClassifier:
             return
         side = self.hand_side or "left"
         self._model = (payload.get("models") or {}).get(side)
-        self._bindings = dict((payload.get("bindings") or {}).get(side) or {})
+        allowed_names = {str(item["name"]) for item in self._templates}
+        model_classes = set(str(item) for item in getattr(self._model, "classes_", [])) if self._model is not None else set()
+        if self._model is not None and model_classes != allowed_names:
+            self._model = None
+            self._bindings = {}
+            self.status_message = f"Static SVM stale for {side} hand."
+            return
+        self._bindings = {
+            str(name): binding
+            for name, binding in dict((payload.get("bindings") or {}).get(side) or {}).items()
+            if str(name) in allowed_names
+        }
         if self._model is None:
             self.status_message = f"Static SVM not trained for {side} hand."
         else:
